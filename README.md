@@ -11,10 +11,11 @@ Install globally via NPM
 
 ## Usage
 
-    rexname [-r] [-f] search replace
+    rexname [-r] [-f] [-c] search replace
 
 - **`-r` recursive**: optional flag to traverse sub-folders.
 - **`-f` folders**: optional flag to include folders as well as files.
+- **`-c` copy**: optional flag to copy files instead of renaming.
 - **search**: a string or regular expression to match files on.
 - **replace**: a string used replace file/folder names. Use `$1 $2...` for matched text.
 
