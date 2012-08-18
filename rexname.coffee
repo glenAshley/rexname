@@ -5,48 +5,44 @@
 
 fs = require 'fs'
 path = require 'path'
-
-# get the options passed in
-options = process.argv.slice 2
-
-if options.length < 2
-	logHeader 'we need a match and replace'
-	return false
-
-
-# split search into body and flags
-search = options[0].match /^\/?(.+?)\/?([igm]*)$/
-# create regex
-search = new RegExp search[1], search[2]
-replace = options[1]
-
-# store the matched filenames
-matchedFiles = []
-
+matchedFiles = [] # store the matched filenames
 fileCount = 0 # store the number of files being renamed
 
 
-# read the files in the current directory
-fs.readdir process.cwd(), (error, files)->
-	if error
-		logHeader 'there was an error'
+readFiles = ()->
+	# get the options passed in
+	options = process.argv.slice 2
+	# split search into body and flags
+	search = options[0].match /^\/?(.+?)\/?([igm]*)$/
+	# create regex
+	search = new RegExp search[1], search[2]
+	replace = options[1]
+
+	if options.length < 2
+		logHeader 'we need a match and replace'
 		return false
 
-	# filter the files
-	files = files.filter (file)->
-		return search.test file
+	# read the files in the current directory
+	fs.readdir process.cwd(), (error, files)->
+		if error
+			logHeader 'there was an error'
+			return false
 
-	# store the match and replacment
-	files.forEach (file)->
-		matchedFiles.push
-			matched: file
-			replacement: file.replace search, replace
+		# filter the files
+		files = files.filter (file)->
+			return search.test file
 
-	listFiles matchedFiles
+		# store the match and replacment
+		files.forEach (file)->
+			matchedFiles.push
+				matched: file
+				replacement: file.replace search, replace
 
-	getInput 'Do you want to proceed? y/n', renameFiles
+		listFiles matchedFiles
 
-	return true
+		getInput 'Do you want to proceed? y/n', renameFiles
+
+		return true
 
 
 # Add new lines and bars to the a message
@@ -78,9 +74,16 @@ getInput = (message, callback)->
 		process.exit()
 
 
+# log when finished
+whenFinished = ()->
+	if --fileCount
+		return false
+	console.log '\nall done'
+
+
 # rename the files
 renameFiles = (doRename)->
-	if doRename is not 'y'
+	if doRename[0] != 'y'
 		return false
 
 	logHeader 'renaming files (grab a tiny coffee)'
@@ -90,10 +93,9 @@ renameFiles = (doRename)->
 		fs.rename file.matched, file.replacement, whenFinished
 		console.log "renaming  #{file.matched} --> #{file.replacement}"
 
+	console.log '\n'
+
 	return true
 
 
-# log when finished
-whenFinished = ()->
-	if --fileCount then return
-	console.log '\nall done'
+readFiles()
