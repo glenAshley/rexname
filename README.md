@@ -1,7 +1,7 @@
 rexname
 =======
 
-NPM utility module to rename files/folders using regular expressions.
+NPM utility module to rename files using regular expressions.
 
 ## Installation
 
@@ -11,13 +11,20 @@ Install globally via NPM
 
 ## Usage
 
-    rexname [-r] [-f] [-c] search replace
+<!-- rexname [-r] [-f] [-c] search replace -->
+    rexname <search> <replace>
 
-- **`-r` recursive**: optional flag to traverse sub-folders.
-- **`-f` folders**: optional flag to include folders as well as files.
-- **`-c` copy**: optional flag to copy files instead of renaming.
-- **search**: a string or regular expression to match files on.
-- **replace**: a string used replace file/folder names. Use `$1 $2...` for matched text.
+<!-- - **`-r` recursive**: optional flag to traverse sub-folders. -->
+<!-- - **`-f` folders**: optional flag to include folders as well as files. -->
+<!-- - **`-c` copy**: optional flag to copy files instead of renaming. -->
+- **search**:
+    a string or regular expression to match files on.
+    e.g. `.txt` or `'/(.*)\.\d{4}/i'`
+    (Use quotes when for special characters or spaces)
+- **replace**:
+    a string used to replace file names.
+    Use `$1 $2...` for matched text.
+    e.g. `'new $1.$2'`
 
 ### Example
 
