@@ -1,6 +1,6 @@
 {
   "name": "rexname",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Utility to rename files/folders using regular expressions.",
   "main": "index.js",
   "scripts": {

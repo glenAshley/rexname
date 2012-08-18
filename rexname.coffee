@@ -6,7 +6,6 @@
 fs = require 'fs'
 path = require 'path'
 matchedFiles = [] # store the matched filenames
-fileCount = 0 # store the number of files being renamed
 
 
 readFiles = ()->
@@ -74,13 +73,6 @@ getInput = (message, callback)->
 		process.exit()
 
 
-# log when finished
-whenFinished = ()->
-	if --fileCount
-		return false
-	console.log '\nall done'
-
-
 # rename the files
 renameFiles = (doRename)->
 	if doRename[0] != 'y'
@@ -89,8 +81,7 @@ renameFiles = (doRename)->
 	logHeader 'renaming files (grab a tiny coffee)'
 
 	matchedFiles.forEach (file)->
-		fileCount++
-		fs.rename file.matched, file.replacement, whenFinished
+		fs.renameSync file.matched, file.replacement
 		console.log "renaming  #{file.matched} --> #{file.replacement}"
 
 	console.log '\n'
